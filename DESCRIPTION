@@ -1,0 +1,16 @@
+Package: expdata
+Type: Package
+Title: Exploratory Data Analysis using data.table
+Description: A light weight exploratory data analysis tool using data.table.
+Version: 0.1.0
+Depends:
+    R (>= 3.3.1)
+Imports:
+    data.table (>= 1.9.6),
+    moments (>= 0.14)
+Author: Rahul, Ph.D.
+Maintainer: Rahul <katyayan.rahul@gmail.com>
+License: GPL-3
+LazyData: TRUE
+URL: http://github.com/r2rahul/expdata
+RoxygenNote: 5.0.1
