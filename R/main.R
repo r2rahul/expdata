@@ -1,15 +1,16 @@
-library(data.table)
-library(moments)
-
 #' Check Date Type
 #'
 #' This function checkes if the input column is of date type.
 #'
+#' @importFrom stats IQR median quantile sd
+#' @import data.table
+#' @import moments
 #' @param x: A single column of data table
 #' @return Logical True if the input column is of date type else False
 #' @export
 is_date <- function(x){
-  inherits(x, "Date")
+  return(inherits(x, "Date") | inherits(x, "POSIXct") | inherits(x, "POSIXlt") | 
+           inherits(x, "POSIXt"))
 }
 
 #' Perform full join between two data tables
