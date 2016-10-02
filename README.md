@@ -21,7 +21,7 @@ The package provides simple methods to get first initial look into the data. The
 
 -   Date
 
-The package is under active development, check upcoming section for next list of features. Please refer to Example section for usage example.
+The package is under active development, check upcoming section for next list of features. Please refer to Example section for usage example and vignettes for detail notes on the package usage. 
 
 Installation
 ------------
@@ -36,6 +36,8 @@ Installation
 ``` r
 library(devtools)
 install_github("r2rahul/expdata")
+# To build Vignettes at the time of installation
+install_github("r2rahul/expdata", build_vignettes = TRUE)
 ```
 
 -   Alternatively, you can download the source code as zip or tar.gz file. Next, unzip or untar the compressed file in the local directory and use `load_all` from devtool package:
