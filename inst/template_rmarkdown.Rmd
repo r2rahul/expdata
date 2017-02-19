@@ -1,0 +1,87 @@
+---
+title: "Exploratory Data Analysis Report"
+output: html_document
+params:
+  data:
+    value: data
+---
+
+```{r, echo=FALSE}
+edadata <- params$data
+head(edadata)
+```
+
+### Numeric Type
+
++ First Set of Descriptions Numeric Variables
+
+```{r num_out1}
+num_out <- num_summary(edadata)
+cselect1 <- c(1:7)
+knitr::kable(num_out[, cselect1, with = FALSE])
+```
+
++ Second Set of Description for Numeric Variables
+
+```{r num_out2}
+num_out <- num_summary(edadata)
+cselect2 <- c(1:3, 8:11)
+knitr::kable(num_out[, cselect2, with = FALSE])
+```
+
++ Third Set of Description for Numeric Variables
+
+```{r num_out3}
+num_out <- num_summary(edadata)
+cselect3 <- c(1:3, 12:16)
+knitr::kable(num_out[, cselect3, with = FALSE])
+```
+
++ Fourth Set of Description for Numeric Variables
+
+```{r num_out4}
+num_out <- num_summary(edadata)
+cselect4 <- c(1:3, 17:20)
+knitr::kable(num_out[, cselect4, with = FALSE])
+```
+
+### Character type
+
+```{r char_out}
+char_out <- char_summary(edadata)
+knitr::kable(char_out)
+```
+
+### Date Type
+
++ Date Summary Part 1
+
+```{r date_out}
+date_out <- date_summary(edadata)
+dselect1 <- c(1:7)
+knitr::kable(date_out[, dselect1, with = FALSE])
+```
+
++ Date Summary Part 2
+
+```{r date_out2}
+date_out <- date_summary(edadata)
+dselect2 <- c(1:3, 8:10)
+knitr::kable(date_out[, dselect2, with = FALSE])
+```
+
+### Logical type
+
+```{r log_out}
+log_out <- log_summary(edadata)
+knitr::kable(log_out)
+```
+
+Since, there are no logical variable function returned the warning message and stopped.
+
+### Factor Type
+
+```{r fac_out}
+fac_out <- factor_summary(edadata)
+knitr::kable(fac_out)
+```

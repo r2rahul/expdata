@@ -274,3 +274,34 @@ complete_summary <- function(data){
  out <- Reduce(join_data, comp_summ)
 return(out)
 }
+
+#' Returns a data frame with maximium 5 and minimum 5.
+#'
+#' This function takes input data.
+#' The function calculates the number of missing values in the vector.
+#'
+#' @param x: The data frame
+#' @param variable: String name of the variable.
+#' @return A data frame
+#' @export
+#' 
+maxmin_count <- function(data, var){
+  y <- data[, .(eval(var))][order(eval(var))]
+  out <- data.frame(var_name = var, max5 = y[1:5], min5 = tail(y, 5))
+  return(out)
+}
+
+#' Returns a data frame with requenct count of date, factor, and character variables.
+#'
+#' This function takes input data.
+#' The function calculates the number of missing values in the vector.
+#'
+#' @param x: The data frame
+#' @param variable: String name of the variable.
+#' @return A data table
+#' @export
+#' 
+frequent_count <- function(data, var){
+  out <- data[, .(freq = .N), by = .(eval(var))][order("freq")]
+  return(out)
+}

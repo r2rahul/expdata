@@ -1,0 +1,78 @@
+---
+title: "expdata: A light weight exploratory data analysis tool using data.table in R."
+author: "Rahul"
+date: "`r Sys.Date()`"
+output: 
+  html_vignette:
+   toc: true
+   toc_depth: 2
+bibliography: ../inst/bibliography.bib
+vignette: >
+  %\VignetteIndexEntry{expdata: A light weight exploratory data analysis tool using data.table in R.}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+The exploratory data analysis is the first step in any data analytic task [@Donoho2015]. The goal of the package is to provide quick first glance into the data profile. The package assumes that data is in tidy format [@JSSv059i10]. Also, package will not convert variable type conversion, instead the data profile can be used to find variables, which might not be correct data type. Here we illustrate the basic functionality of the package using `nycflights13` data set. We will use _weather and flights_ data to explore the expdata package.
+
+## Example Exploratory Data Analysis
+
+```{r init_libs}
+library(nycflights13)
+library(expdata)
+```
+
+First, let us generate the complete data summary of the _weather_ data set using method `complete_summary`. 
+
+```{r f_sum}
+sum_out <- complete_summary(weather)
+knitr::kable(sum_out)
+```
+
+Please, note that if particular data type is missing then function will give a warning message. For example, there are no factor and logical variable in the data. So, the function gave a warning message.
+
+
+Now let us explore the _flights_ data to explore each variable method one by one.
+
++ Numeric Type
+
+```{r num_out}
+num_out <- num_summary(flights)
+knitr::kable(num_out)
+```
+
+
++ Character type
+
+```{r char_out}
+char_out <- char_summary(flights)
+knitr::kable(char_out)
+```
+
++ Date Type
+
+```{r date_out}
+date_out <- date_summary(flights)
+knitr::kable(date_out)
+```
+
++ Logical type
+
+```{r log_out}
+log_out <- log_summary(flights)
+knitr::kable(log_out)
+```
+
+Since, there are no logical variable function returned the warning message and stopped.
+
++ Factor Type
+
+```{r fac_out}
+fac_out <- factor_summary(flights)
+knitr::kable(fac_out)
+```
+
+
+Since, there are no factor variable function returned the warning message and stopped.
+
+## Bibiography

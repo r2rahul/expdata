@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Rahul" />
+
+<meta name="date" content="2017-01-10" />
+
+<title>expdata: A light weight exploratory data analysis tool using data.table in R.</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">expdata: A light weight exploratory data analysis tool using data.table in R.</h1>
+<h4 class="author"><em>Rahul</em></h4>
+<h4 class="date"><em>2017-01-10</em></h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#example-exploratory-data-analysis">Example Exploratory Data Analysis</a></li>
+<li><a href="#bibiography">Bibiography</a></li>
+</ul>
+</div>
+
+<p>The exploratory data analysis is the first step in any data analytic task <span class="citation">(Donoho 2015)</span>. The goal of the package is to provide quick first glance into the data profile. The package assumes that data is in tidy format <span class="citation">(Wickham 2014)</span>. Also, package will not convert variable type conversion, instead the data profile can be used to find variables, which might not be correct data type. Here we illustrate the basic functionality of the package using <code>nycflights13</code> data set. We will use <em>weather and flights</em> data to explore the expdata package.</p>
+<div id="example-exploratory-data-analysis" class="section level2">
+<h2>Example Exploratory Data Analysis</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(nycflights13)
+<span class="kw">library</span>(expdata)</code></pre></div>
+<p>First, let us generate the complete data summary of the <em>weather</em> data set using method <code>complete_summary</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sum_out &lt;-<span class="st"> </span><span class="kw">complete_summary</span>(weather)</code></pre></div>
+<pre><code>## Warning in log_summary(data): The data table has no logical columns</code></pre>
+<pre><code>## Warning in factor_summary(data): The data table has no factor columns</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">kable</span>(sum_out)</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">var_name</th>
+<th align="left">type</th>
+<th align="right">num_row</th>
+<th align="right">miss_num</th>
+<th align="right">miss %</th>
+<th align="right">zero_count</th>
+<th align="right">zero %</th>
+<th align="right">var_min</th>
+<th align="right">var_max</th>
+<th align="right">distinct</th>
+<th align="right">quant 0%</th>
+<th align="right">quant 25%</th>
+<th align="right">quant 75%</th>
+<th align="right">quant 100%</th>
+<th align="right">var_av</th>
+<th align="right">var_sd</th>
+<th align="right">var_med</th>
+<th align="right">var_sum</th>
+<th align="right">var_kurtosis</th>
+<th align="right">var_skewness</th>
+<th align="right">var_iqr</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">day</td>
+<td align="left">numeric</td>
+<td align="right">26130</td>
+<td align="right">0</td>
+<td align="right">0.0000000</td>
+<td align="right">0</td>
+<td align="right">0.0000000</td>
+<td align="right">1.00</td>
+<td align="right">3.100000e+01</td>
+<td align="right">NA</td>
+<td align="right">1.00</td>
+<td align="right">8.000000</td>
+<td align="right">23.00000</td>
+<td align="right">31.000</td>
+<td align="right">15.6797168</td>
+<td align="right">8.7650224</td>
+<td align="right">16.00000</td>
+<td align="right">409711.00</td>
+<td align="right">0.0085758</td>
+<td align="right">1.808526</td>
+<td align="right">15.000000</td>
+</tr>
+<tr class="even">
+<td align="left">dewp</td>
+<td align="left">numeric</td>
+<td align="right">26130</td>
+<td align="right">1</td>
+<td align="right">0.0000383</td>
+<td align="right">1</td>
+<td align="right">0.0000383</td>
+<td align="right">-9.94</td>
+<td align="right">7.808000e+01</td>
+<td align="right">NA</td>
+<td align="right">-9.94</td>
+<td align="right">26.060000</td>
+<td align="right">57.92000</td>
+<td align="right">78.080</td>
+<td align="right">41.3853994</td>
+<td align="right">19.3716488</td>
+<td align="right">42.08000</td>
+<td align="right">1081359.10</td>
+<td align="right">-0.1682883</td>
+<td align="right">2.008449</td>
+<td align="right">31.860000</td>
+</tr>
+<tr class="odd">
+<td align="left">hour</td>
+<td align="left">numeric</td>
+<td align="right">26130</td>
+<td align="right">0</td>
+<td align="right">0.0000000</td>
+<td align="right">1082</td>
+<td align="right">0.0414083</td>
+<td align="right">0.00</td>
+<td align="right">2.300000e+01</td>
+<td align="right">NA</td>
+<td align="right">0.00</td>
+<td align="right">6.000000</td>
+<td align="right">18.00000</td>
+<td align="right">23.000</td>
+<td align="right">11.5184080</td>
+<td align="right">6.9165810</td>
+<td align="right">12.00000</td>
+<td align="right">300976.00</td>
+<td align="right">-0.0029293</td>
+<td align="right">1.797875</td>
+<td align="right">12.000000</td>
+</tr>
+<tr class="even">
+<td align="left">humid</td>
+<td align="left">numeric</td>
+<td align="right">26130</td>
+<td align="right">1</td>
+<td align="right">0.0000383</td>
+<td align="right">1</td>
+<td align="right">0.0000383</td>
+<td align="right">12.74</td>
+<td align="right">1.000000e+02</td>
+<td align="right">NA</td>
+<td align="right">12.74</td>
+<td align="right">46.990000</td>
+<td align="right">78.62000</td>
+<td align="right">100.000</td>
+<td align="right">62.3473217</td>
+<td align="right">19.1960775</td>
+<td align="right">61.66000</td>
+<td align="right">1629073.17</td>
+<td align="right">0.0025317</td>
+<td align="right">2.045846</td>
+<td align="right">31.630000</td>
+</tr>
+<tr class="odd">
+<td align="left">month</td>
+<td align="left">numeric</td>
+<td align="right">26130</td>
+<td align="right">0</td>
+<td align="right">0.0000000</td>
+<td align="right">0</td>
+<td align="right">0.0000000</td>
+<td align="right">1.00</td>
+<td align="right">1.200000e+01</td>
+<td align="right">NA</td>
+<td align="right">1.00</td>
+<td align="right">4.000000</td>
+<td align="right">9.00000</td>
+<td align="right">12.000</td>
+<td align="right">6.5057405</td>
+<td align="right">3.4400306</td>
+<td align="right">7.00000</td>
+<td align="right">169995.00</td>
+<td align="right">-0.0056339</td>
+<td align="right">1.796669</td>
+<td align="right">5.000000</td>
+</tr>
+<tr class="even">
+<td align="left">origin</td>
+<td align="left">character</td>
+<td align="right">26130</td>
+<td align="right">0</td>
+<td align="right">0.0000000</td>
+<td align="right">0</td>
+<td align="right">0.0000000</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">3</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">precip</td>
+<td align="left">numeric</td>
+<td align="right">26130</td>
+<td align="right">0</td>
+<td align="right">0.0000000</td>
+<td align="right">24656</td>
+<td align="right">0.9435897</td>
+<td align="right">0.00</td>
+<td align="right">1.180000e+00</td>
+<td align="right">NA</td>
+<td align="right">0.00</td>
+<td align="right">0.000000</td>
+<td align="right">0.00000</td>
+<td align="right">1.180</td>
+<td align="right">0.0027264</td>
+<td align="right">0.0196648</td>
+<td align="right">0.00000</td>
+<td align="right">71.24</td>
+<td align="right">18.4885854</td>
+<td align="right">669.792343</td>
+<td align="right">0.000000</td>
+</tr>
+<tr class="even">
+<td align="left">pressure</td>
+<td align="left">numeric</td>
+<td align="right">26130</td>
+<td align="right">2730</td>
+<td align="right">0.1044776</td>
+<td align="right">2730</td>
+<td align="right">0.1044776</td>
+<td align="right">983.80</td>
+<td align="right">1.042100e+03</td>
+<td align="right">NA</td>
+<td align="right">983.80</td>
+<td align="right">1012.900000</td>
+<td align="right">1023.00000</td>
+<td align="right">1042.100</td>
+<td align="right">1017.8951752</td>
+<td align="right">7.4227899</td>
+<td align="right">1017.60000</td>
+<td align="right">23818747.10</td>
+<td align="right">0.0997207</td>
+<td align="right">3.020469</td>
+<td align="right">10.100000</td>
+</tr>
+<tr class="odd">
+<td align="left">temp</td>
+<td align="left">numeric</td>
+<td align="right">26130</td>
+<td align="right">1</td>
+<td align="right">0.0000383</td>
+<td align="right">1</td>
+<td align="right">0.0000383</td>
+<td align="right">10.94</td>
+<td align="right">1.000400e+02</td>
+<td align="right">NA</td>
+<td align="right">10.94</td>
+<td align="right">39.920000</td>
+<td align="right">69.98000</td>
+<td align="right">100.040</td>
+<td align="right">55.2035149</td>
+<td align="right">17.7821236</td>
+<td align="right">55.04000</td>
+<td align="right">1442412.64</td>
+<td align="right">-0.0040802</td>
+<td align="right">2.022415</td>
+<td align="right">30.060000</td>
+</tr>
+<tr class="even">
+<td align="left">time_hour</td>
+<td align="left">date</td>
+<td align="right">26130</td>
+<td align="right">0</td>
+<td align="right">0.0000000</td>
+<td align="right">0</td>
+<td align="right">0.0000000</td>
+<td align="right">1356998400.00</td>
+<td align="right">1.388444e+09</td>
+<td align="right">8718</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td align="left">visib</td>
+<td align="left">numeric</td>
+<td align="right">26130</td>
+<td align="right">0</td>
+<td align="right">0.0000000</td>
+<td align="right">11</td>
+<td align="right">0.0004210</td>
+<td align="right">0.00</td>
+<td align="right">1.000000e+01</td>
+<td align="right">NA</td>
+<td align="right">0.00</td>
+<td align="right">10.000000</td>
+<td align="right">10.00000</td>
+<td align="right">10.000</td>
+<td align="right">9.2048278</td>
+<td align="right">2.1363058</td>
+<td align="right">10.00000</td>
+<td align="right">240522.15</td>
+<td align="right">-2.8707576</td>
+<td align="right">10.278931</td>
+<td align="right">0.000000</td>
+</tr>
+<tr class="even">
+<td align="left">wind_dir</td>
+<td align="left">numeric</td>
+<td align="right">26130</td>
+<td align="right">418</td>
+<td align="right">0.0159969</td>
+<td align="right">1748</td>
+<td align="right">0.0668963</td>
+<td align="right">0.00</td>
+<td align="right">3.600000e+02</td>
+<td align="right">NA</td>
+<td align="right">0.00</td>
+<td align="right">120.000000</td>
+<td align="right">290.00000</td>
+<td align="right">360.000</td>
+<td align="right">198.0666615</td>
+<td align="right">107.8416236</td>
+<td align="right">220.00000</td>
+<td align="right">5092690.00</td>
+<td align="right">-0.4479193</td>
+<td align="right">1.996279</td>
+<td align="right">170.000000</td>
+</tr>
+<tr class="odd">
+<td align="left">wind_gust</td>
+<td align="left">numeric</td>
+<td align="right">26130</td>
+<td align="right">3</td>
+<td align="right">0.0001148</td>
+<td align="right">1333</td>
+<td align="right">0.0510142</td>
+<td align="right">0.00</td>
+<td align="right">1.206432e+03</td>
+<td align="right">NA</td>
+<td align="right">0.00</td>
+<td align="right">7.945768</td>
+<td align="right">15.89154</td>
+<td align="right">1206.432</td>
+<td align="right">11.9633573</td>
+<td align="right">9.8060268</td>
+<td align="right">10.59436</td>
+<td align="right">312566.63</td>
+<td align="right">69.3490691</td>
+<td align="right">8427.653644</td>
+<td align="right">7.945768</td>
+</tr>
+<tr class="even">
+<td align="left">wind_speed</td>
+<td align="left">numeric</td>
+<td align="right">26130</td>
+<td align="right">3</td>
+<td align="right">0.0001148</td>
+<td align="right">1333</td>
+<td align="right">0.0510142</td>
+<td align="right">0.00</td>
+<td align="right">1.048361e+03</td>
+<td align="right">NA</td>
+<td align="right">0.00</td>
+<td align="right">6.904680</td>
+<td align="right">13.80936</td>
+<td align="right">1048.361</td>
+<td align="right">10.3958682</td>
+<td align="right">8.5212002</td>
+<td align="right">9.20624</td>
+<td align="right">271612.85</td>
+<td align="right">69.3490691</td>
+<td align="right">8427.653644</td>
+<td align="right">6.904680</td>
+</tr>
+<tr class="odd">
+<td align="left">year</td>
+<td align="left">numeric</td>
+<td align="right">26130</td>
+<td align="right">0</td>
+<td align="right">0.0000000</td>
+<td align="right">0</td>
+<td align="right">0.0000000</td>
+<td align="right">2013.00</td>
+<td align="right">2.013000e+03</td>
+<td align="right">NA</td>
+<td align="right">2013.00</td>
+<td align="right">2013.000000</td>
+<td align="right">2013.00000</td>
+<td align="right">2013.000</td>
+<td align="right">2013.0000000</td>
+<td align="right">0.0000000</td>
+<td align="right">2013.00000</td>
+<td align="right">52599690.00</td>
+<td align="right">NaN</td>
+<td align="right">NaN</td>
+<td align="right">0.000000</td>
+</tr>
+</tbody>
+</table>
+<p>Please, note that if particular data type is missing then function will give a warning message. For example, there are no factor and logical variable in the data. So, the function gave a warning message.</p>
+<p>Now let us explore the <em>flights</em> data to explore each variable method one by one.</p>
+<ul>
+<li>Numeric Type</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">num_out &lt;-<span class="st"> </span><span class="kw">num_summary</span>(flights)
+knitr::<span class="kw">kable</span>(num_out)</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">var_name</th>
+<th align="left">type</th>
+<th align="right">num_row</th>
+<th align="right">miss_num</th>
+<th align="right">miss %</th>
+<th align="right">zero_count</th>
+<th align="right">zero %</th>
+<th align="right">quant 0%</th>
+<th align="right">quant 25%</th>
+<th align="right">quant 75%</th>
+<th align="right">quant 100%</th>
+<th align="right">var_av</th>
+<th align="right">var_sd</th>
+<th align="right">var_med</th>
+<th align="right">var_min</th>
+<th align="right">var_max</th>
+<th align="right">var_sum</th>
+<th align="right">var_kurtosis</th>
+<th align="right">var_skewness</th>
+<th align="right">var_iqr</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">year</td>
+<td align="left">numeric</td>
+<td align="right">336776</td>
+<td align="right">0</td>
+<td align="right">0.0000000</td>
+<td align="right">0</td>
+<td align="right">0.0000000</td>
+<td align="right">2013</td>
+<td align="right">2013</td>
+<td align="right">2013</td>
+<td align="right">2013</td>
+<td align="right">2013.000000</td>
+<td align="right">0.000000</td>
+<td align="right">2013</td>
+<td align="right">2013</td>
+<td align="right">2013</td>
+<td align="right">677930088</td>
+<td align="right">NaN</td>
+<td align="right">NaN</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">month</td>
+<td align="left">numeric</td>
+<td align="right">336776</td>
+<td align="right">0</td>
+<td align="right">0.0000000</td>
+<td align="right">0</td>
+<td align="right">0.0000000</td>
+<td align="right">1</td>
+<td align="right">4</td>
+<td align="right">10</td>
+<td align="right">12</td>
+<td align="right">6.548510</td>
+<td align="right">3.414457</td>
+<td align="right">7</td>
+<td align="right">1</td>
+<td align="right">12</td>
+<td align="right">2205381</td>
+<td align="right">-0.0133998</td>
+<td align="right">1.813050</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">day</td>
+<td align="left">numeric</td>
+<td align="right">336776</td>
+<td align="right">0</td>
+<td align="right">0.0000000</td>
+<td align="right">0</td>
+<td align="right">0.0000000</td>
+<td align="right">1</td>
+<td align="right">8</td>
+<td align="right">23</td>
+<td align="right">31</td>
+<td align="right">15.710787</td>
+<td align="right">8.768607</td>
+<td align="right">16</td>
+<td align="right">1</td>
+<td align="right">31</td>
+<td align="right">5291016</td>
+<td align="right">0.0077445</td>
+<td align="right">1.814054</td>
+<td align="right">15</td>
+</tr>
+<tr class="even">
+<td align="left">dep_time</td>
+<td align="left">numeric</td>
+<td align="right">336776</td>
+<td align="right">8255</td>
+<td align="right">0.0245118</td>
+<td align="right">8255</td>
+<td align="right">0.0245118</td>
+<td align="right">1</td>
+<td align="right">907</td>
+<td align="right">1744</td>
+<td align="right">2400</td>
+<td align="right">1349.109947</td>
+<td align="right">488.281791</td>
+<td align="right">1401</td>
+<td align="right">1</td>
+<td align="right">2400</td>
+<td align="right">443210949</td>
+<td align="right">-0.0247433</td>
+<td align="right">1.911678</td>
+<td align="right">837</td>
+</tr>
+<tr class="odd">
+<td align="left">sched_dep_time</td>
+<td align="left">numeric</td>
+<td align="right">336776</td>
+<td align="right">0</td>
+<td align="right">0.0000000</td>
+<td align="right">0</td>
+<td align="right">0.0000000</td>
+<td align="right">106</td>
+<td align="right">906</td>
+<td align="right">1729</td>
+<td align="right">2359</td>
+<td align="right">1344.254840</td>
+<td align="right">467.335756</td>
+<td align="right">1359</td>
+<td align="right">106</td>
+<td align="right">2359</td>
+<td align="right">452712768</td>
+<td align="right">-0.0058581</td>
+<td align="right">1.802097</td>
+<td align="right">823</td>
+</tr>
+<tr class="even">
+<td align="left">dep_delay</td>
+<td align="left">numeric</td>
+<td align="right">336776</td>
+<td align="right">8255</td>
+<td align="right">0.0245118</td>
+<td align="right">24769</td>
+<td align="right">0.0735474</td>
+<td align="right">-43</td>
+<td align="right">-5</td>
+<td align="right">11</td>
+<td align="right">1301</td>
+<td align="right">12.639070</td>
+<td align="right">40.210061</td>
+<td align="right">-2</td>
+<td align="right">-43</td>
+<td align="right">1301</td>
+<td align="right">4152200</td>
+<td align="right">4.8025186</td>
+<td align="right">46.949429</td>
+<td align="right">16</td>
+</tr>
+<tr class="odd">
+<td align="left">arr_time</td>
+<td align="left">numeric</td>
+<td align="right">336776</td>
+<td align="right">8713</td>
+<td align="right">0.0258718</td>
+<td align="right">8713</td>
+<td align="right">0.0258718</td>
+<td align="right">1</td>
+<td align="right">1104</td>
+<td align="right">1940</td>
+<td align="right">2400</td>
+<td align="right">1502.054999</td>
+<td align="right">533.264132</td>
+<td align="right">1535</td>
+<td align="right">1</td>
+<td align="right">2400</td>
+<td align="right">492768669</td>
+<td align="right">-0.4678169</td>
+<td align="right">2.807350</td>
+<td align="right">836</td>
+</tr>
+<tr class="even">
+<td align="left">sched_arr_time</td>
+<td align="left">numeric</td>
+<td align="right">336776</td>
+<td align="right">0</td>
+<td align="right">0.0000000</td>
+<td align="right">0</td>
+<td align="right">0.0000000</td>
+<td align="right">1</td>
+<td align="right">1124</td>
+<td align="right">1945</td>
+<td align="right">2359</td>
+<td align="right">1536.380220</td>
+<td align="right">497.457141</td>
+<td align="right">1556</td>
+<td align="right">1</td>
+<td align="right">2359</td>
+<td align="right">517415985</td>
+<td align="right">-0.3531365</td>
+<td align="right">2.617740</td>
+<td align="right">821</td>
+</tr>
+<tr class="odd">
+<td align="left">arr_delay</td>
+<td align="left">numeric</td>
+<td align="right">336776</td>
+<td align="right">9430</td>
+<td align="right">0.0280008</td>
+<td align="right">14839</td>
+<td align="right">0.0440619</td>
+<td align="right">-86</td>
+<td align="right">-17</td>
+<td align="right">14</td>
+<td align="right">1272</td>
+<td align="right">6.895377</td>
+<td align="right">44.633292</td>
+<td align="right">-5</td>
+<td align="right">-86</td>
+<td align="right">1272</td>
+<td align="right">2257174</td>
+<td align="right">3.7168004</td>
+<td align="right">32.232579</td>
+<td align="right">31</td>
+</tr>
+<tr class="even">
+<td align="left">flight</td>
+<td align="left">numeric</td>
+<td align="right">336776</td>
+<td align="right">0</td>
+<td align="right">0.0000000</td>
+<td align="right">0</td>
+<td align="right">0.0000000</td>
+<td align="right">1</td>
+<td align="right">553</td>
+<td align="right">3465</td>
+<td align="right">8500</td>
+<td align="right">1971.923620</td>
+<td align="right">1632.471938</td>
+<td align="right">1496</td>
+<td align="right">1</td>
+<td align="right">8500</td>
+<td align="right">664096549</td>
+<td align="right">0.6616007</td>
+<td align="right">2.151434</td>
+<td align="right">2912</td>
+</tr>
+<tr class="odd">
+<td align="left">air_time</td>
+<td align="left">numeric</td>
+<td align="right">336776</td>
+<td align="right">9430</td>
+<td align="right">0.0280008</td>
+<td align="right">9430</td>
+<td align="right">0.0280008</td>
+<td align="right">20</td>
+<td align="right">82</td>
+<td align="right">192</td>
+<td align="right">695</td>
+<td align="right">150.686460</td>
+<td align="right">93.688305</td>
+<td align="right">129</td>
+<td align="right">20</td>
+<td align="right">695</td>
+<td align="right">49326610</td>
+<td align="right">1.0707003</td>
+<td align="right">3.863046</td>
+<td align="right">110</td>
+</tr>
+<tr class="even">
+<td align="left">distance</td>
+<td align="left">numeric</td>
+<td align="right">336776</td>
+<td align="right">0</td>
+<td align="right">0.0000000</td>
+<td align="right">0</td>
+<td align="right">0.0000000</td>
+<td align="right">17</td>
+<td align="right">502</td>
+<td align="right">1389</td>
+<td align="right">4983</td>
+<td align="right">1039.912604</td>
+<td align="right">733.233033</td>
+<td align="right">872</td>
+<td align="right">17</td>
+<td align="right">4983</td>
+<td align="right">350217607</td>
+<td align="right">1.1286851</td>
+<td align="right">4.193604</td>
+<td align="right">887</td>
+</tr>
+<tr class="odd">
+<td align="left">hour</td>
+<td align="left">numeric</td>
+<td align="right">336776</td>
+<td align="right">0</td>
+<td align="right">0.0000000</td>
+<td align="right">0</td>
+<td align="right">0.0000000</td>
+<td align="right">1</td>
+<td align="right">9</td>
+<td align="right">17</td>
+<td align="right">23</td>
+<td align="right">13.180247</td>
+<td align="right">4.661316</td>
+<td align="right">13</td>
+<td align="right">1</td>
+<td align="right">23</td>
+<td align="right">4438791</td>
+<td align="right">-0.0005426</td>
+<td align="right">1.793584</td>
+<td align="right">8</td>
+</tr>
+<tr class="even">
+<td align="left">minute</td>
+<td align="left">numeric</td>
+<td align="right">336776</td>
+<td align="right">0</td>
+<td align="right">0.0000000</td>
+<td align="right">60696</td>
+<td align="right">0.1802266</td>
+<td align="right">0</td>
+<td align="right">8</td>
+<td align="right">44</td>
+<td align="right">59</td>
+<td align="right">26.230100</td>
+<td align="right">19.300846</td>
+<td align="right">29</td>
+<td align="right">0</td>
+<td align="right">59</td>
+<td align="right">8833668</td>
+<td align="right">0.0929305</td>
+<td align="right">1.764982</td>
+<td align="right">36</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Character type</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">char_out &lt;-<span class="st"> </span><span class="kw">char_summary</span>(flights)
+knitr::<span class="kw">kable</span>(char_out)</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">var_name</th>
+<th align="left">type</th>
+<th align="right">num_row</th>
+<th align="right">miss_num</th>
+<th align="right">miss %</th>
+<th align="right">zero_count</th>
+<th align="right">zero %</th>
+<th align="right">distinct</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">carrier</td>
+<td align="left">character</td>
+<td align="right">336776</td>
+<td align="right">0</td>
+<td align="right">0.000000</td>
+<td align="right">0</td>
+<td align="right">0.000000</td>
+<td align="right">16</td>
+</tr>
+<tr class="even">
+<td align="left">tailnum</td>
+<td align="left">character</td>
+<td align="right">336776</td>
+<td align="right">2512</td>
+<td align="right">0.007459</td>
+<td align="right">2512</td>
+<td align="right">0.007459</td>
+<td align="right">4044</td>
+</tr>
+<tr class="odd">
+<td align="left">origin</td>
+<td align="left">character</td>
+<td align="right">336776</td>
+<td align="right">0</td>
+<td align="right">0.000000</td>
+<td align="right">0</td>
+<td align="right">0.000000</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">dest</td>
+<td align="left">character</td>
+<td align="right">336776</td>
+<td align="right">0</td>
+<td align="right">0.000000</td>
+<td align="right">0</td>
+<td align="right">0.000000</td>
+<td align="right">105</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Date Type</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">date_out &lt;-<span class="st"> </span><span class="kw">date_summary</span>(flights)
+knitr::<span class="kw">kable</span>(date_out)</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">var_name</th>
+<th align="left">type</th>
+<th align="right">num_row</th>
+<th align="right">miss_num</th>
+<th align="right">miss %</th>
+<th align="right">zero_count</th>
+<th align="right">zero %</th>
+<th align="right">distinct</th>
+<th align="right">var_min</th>
+<th align="right">var_max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">time_hour</td>
+<td align="left">date</td>
+<td align="right">336776</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">6936</td>
+<td align="right">1357016400</td>
+<td align="right">1388530800</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Logical type</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">log_out &lt;-<span class="st"> </span><span class="kw">log_summary</span>(flights)</code></pre></div>
+<pre><code>## Warning in log_summary(flights): The data table has no logical columns</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">kable</span>(log_out)</code></pre></div>
+<p>Since, there are no logical variable function returned the warning message and stopped.</p>
+<ul>
+<li>Factor Type</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fac_out &lt;-<span class="st"> </span><span class="kw">factor_summary</span>(flights)</code></pre></div>
+<pre><code>## Warning in factor_summary(flights): The data table has no factor columns</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">kable</span>(fac_out)</code></pre></div>
+<p>Since, there are no factor variable function returned the warning message and stopped.</p>
+</div>
+<div id="bibiography" class="section level2 unnumbered">
+<h2>Bibiography</h2>
+<div id="refs" class="references">
+<div id="ref-Donoho2015">
+<p>Donoho, David. 2015. “50 Years of Data Science.” <em>John W. Tukey 100th Birthday Celebration at Princeton University</em>, 1–41.</p>
+</div>
+<div id="ref-JSSv059i10">
+<p>Wickham, Hadley. 2014. “Tidy Data.” <em>Journal of Statistical Software</em> 59 (1): 1–23. doi:<a href="https://doi.org/10.18637/jss.v059.i10">10.18637/jss.v059.i10</a>.</p>
+</div>
+</div>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
