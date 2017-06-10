@@ -1,0 +1,5 @@
+man/* linguist-documentation
+vignettes/* linguist-documentation
+inst/* linguist-documentation
+*.Rmd linguist-language=R
+*.R linguist-language=R

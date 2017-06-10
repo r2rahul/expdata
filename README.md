@@ -9,7 +9,7 @@ expdata: A light weight exploratory data analysis tool using data.table in R.
 Introduction
 ------------
 
-The package provides simple methods to get first initial look into the data. The methods are implemented using **data.table** package so that the package can handle large data sets. The implemented methods can automatically detect variable type and create the corresponding summary as a data frame. The currently implemented methods detect following variable types:
+The package provides simple methods to get first look into the tidy data. The methods are implemented using **data.table** package so that the package can handle large data sets. The implemented methods can automatically detect variable type and create the corresponding summary as a data frame. The currently implemented methods detect following variable types:
 
 -   Numeric
 
