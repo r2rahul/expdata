@@ -1,5 +1,4 @@
-man/* linguist-documentation
-vignettes/* linguist-documentation
-inst/* linguist-documentation
+man/* linguist-vendored
+vignettes/* linguist-vendored
+inst/* linguist-vendored
 *.Rmd linguist-language=R
-*.R linguist-language=R
