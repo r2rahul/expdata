@@ -1,4 +1,2 @@
-man/* linguist-vendored=false
-vignettes/* linguist-vendored=false
-inst/* linguist-vendored=false
-R/*.R linguist-language=r
+* linguist-vendored
+*.R linguist-vendored=false
