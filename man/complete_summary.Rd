@@ -16,4 +16,3 @@ A frame
 This function takes input as a data table or data frame.
 The function creates complete summary of the data.
 }
-

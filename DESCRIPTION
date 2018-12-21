@@ -13,4 +13,4 @@ Maintainer: Rahul <katyayan.rahul@gmail.com>
 License: GPL-3
 LazyData: TRUE
 URL: http://github.com/r2rahul/expdata
-RoxygenNote: 5.0.1
+RoxygenNote: 6.1.1

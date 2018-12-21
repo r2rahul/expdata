@@ -16,4 +16,3 @@ A data frame
 This function takes input as a data table or data frame.
 The function creates summary for the character variable.
 }
-

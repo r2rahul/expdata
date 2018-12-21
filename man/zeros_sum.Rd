@@ -18,4 +18,3 @@ A vector
 This function takes input vector.
 The function calculates the number of zeros values in the vector.
 }
-

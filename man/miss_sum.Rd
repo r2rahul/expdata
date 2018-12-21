@@ -18,4 +18,3 @@ A vector
 This function takes input vector.
 The function calculates the number of missing values in the vector.
 }
-

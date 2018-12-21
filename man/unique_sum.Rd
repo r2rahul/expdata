@@ -16,4 +16,3 @@ A vector
 This function takes input as vector or column of data table or data frame.
 The function returns the number of unique elements in the vector.
 }
-

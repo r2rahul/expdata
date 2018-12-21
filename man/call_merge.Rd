@@ -18,4 +18,3 @@ A data.table
 This function takes input as two data tables and perform full join between the two.
 The join keys are all the common columns between the two data table
 }
-

@@ -72,7 +72,8 @@ den_plot <- function(data, x_var){
 #' This function takes input data.
 #' The function calculates the number of missing values in the vector.
 #'
-#'@import rbokeh, rmarkdown
+#'@import rbokeh
+#'@import rmarkdown
 #'@param data: The data frame
 #'@param filename: String name for the report name.
 #'@param output_format: Output Format.
@@ -96,4 +97,22 @@ exploratory_report <- function(data, filename = NULL, output_format = "html_docu
     intermediates_dir = wd,
     knit_root_dir = wd
     )
+}
+
+#' Check Date Type
+#'
+#' This function checkes if the input column is of date type.
+#'
+#' @importFrom stats IQR median quantile sd
+#' @import data.table
+#' @param x: A single numeric column to get top n and min n numbers
+#' @param n: count of top numbers to return
+#' @return returns a data.frame with two columns with min and max numbers
+#' @export
+top_min_n <- function(data, x_var, n = 5){
+  out <- data[order(-get(x_var))][,get(x_var)]
+  max_numbers <- head(out, n)
+  min_numbers <- tail(out, n)
+  dd <- data.frame(max_numbers = max_numbers, min_numbers = min_numbers)
+  return(dd)
 }

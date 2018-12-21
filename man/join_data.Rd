@@ -19,4 +19,3 @@ This function takes input as two data tables.
 The function checks if any one data.table is empty and returns the non-empty data.table
 If both the data tables are non-empty then it call the call_merge to perform full join on the two data tables.
 }
-

@@ -18,4 +18,3 @@ A data table
 This function takes input data.
 The function calculates the number of missing values in the vector.
 }
-

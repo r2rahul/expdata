@@ -15,4 +15,3 @@ Logical True if the input column is of date type else False
 \description{
 This function checkes if the input column is of date type.
 }
-
