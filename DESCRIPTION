@@ -13,4 +13,5 @@ Maintainer: Rahul <katyayan.rahul@gmail.com>
 License: GPL-3
 LazyData: TRUE
 URL: http://github.com/r2rahul/expdata
+Encoding: UTF-8
 RoxygenNote: 6.1.1
