@@ -130,7 +130,7 @@ top_min_n <- function(data, x_var, n = 5){
 #' @param x: A single numeric column to get top n and min n numbers
 #' @param y: Column to summarize default is input column
 #' @param break: bin size of data
-#' @return returns a data.frame with two columns with min and max numbers
+#' @return returns a list containing summary data.frame with two columns with min and max numbers
 #' @export
 helper_bin <- function(data, x, y, breaks, ...){
   
