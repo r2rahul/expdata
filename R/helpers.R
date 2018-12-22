@@ -99,12 +99,13 @@ exploratory_report <- function(data, filename = NULL, output_format = "html_docu
     )
 }
 
-#' Check Date Type
+#' Find Max and Min of the Numeric Columns
 #'
-#' This function checkes if the input column is of date type.
+#' This function finds max n and min n data of the numeric columns
 #'
 #' @importFrom stats IQR median quantile sd
 #' @import data.table
+#' @param data: Input data table
 #' @param x: A single numeric column to get top n and min n numbers
 #' @param n: count of top numbers to return
 #' @return returns a data.frame with two columns with min and max numbers
@@ -115,4 +116,37 @@ top_min_n <- function(data, x_var, n = 5){
   min_numbers <- tail(out, n)
   dd <- data.frame(max_numbers = max_numbers, min_numbers = min_numbers)
   return(dd)
+}
+
+#' Group Column based on bin size
+#'
+#' This function groups columns based on bin size of numeric data. 
+#' Ideally The breaks should start from -Inf and end at +Inf to avoid Nan's. 
+#' Otherwise we can see see Nan's. Default bin's are calculated based on quartiles of the data
+#'
+#' @importFrom stats IQR median quantile sd
+#' @import data.table
+#' @param data Input data table
+#' @param x: A single numeric column to get top n and min n numbers
+#' @param y: Column to summarize default is input column
+#' @param break: bin size of data
+#' @return returns a data.frame with two columns with min and max numbers
+#' @export
+group_bin <- function(data, x, y = NULL, breaks = NULL, ...){
+  if(is.null(breaks)){
+    breaks <- quantile(data[, get(x)], probs = c(0.25, 0.50, 0.75))
+    breaks <- c(-Inf, breaks, Inf)
+  }
+  
+  if(is.null(y)){
+    out <- data[, 
+                .(count = .N, avg = mean(get(x)), std = sd(get(x))), 
+                by = cut(get(x), breaks = breaks)]
+  }else{
+    out <- data[, 
+                .(count = .N, avg = mean(get(y)), std = sd(get(y))), 
+                by = cut(get(x), breaks = breaks, ordered_result = TRUE)]
+  }
+  setnames(out, old = "cut", new = "bin_groups")
+return(out)
 }
