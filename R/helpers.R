@@ -133,6 +133,7 @@ top_min_n <- function(data, x_var, n = 5){
 #' @return returns a data.frame with two columns with min and max numbers
 #' @export
 helper_bin <- function(data, x, y, breaks, ...){
+  
   dt <- data[, .SD, .SDcols = c(x, y)]
   out <- list()
   num_s <- dt[, 
@@ -149,9 +150,9 @@ helper_bin <- function(data, x, y, breaks, ...){
                 "quant 100%" = sapply(.SD, quantile, probs = 1, na.rm = TRUE),
                 var_av = sapply(.SD, mean, na.rm = TRUE),
                 var_sd = sapply(.SD, sd, na.rm = TRUE),
-                var_med = sapply(.SD, median, na.rm = TRUE),
-                var_min = sapply(.SD, min, na.rm = TRUE),
-                var_max = sapply(.SD, max, na.rm = TRUE),
+                var_med = sapply(.SD, function(x) as.double(median(x, na.rm = TRUE))),
+                var_min = sapply(.SD, function(x) as.double(min(x, na.rm = TRUE))),
+                var_max = sapply(.SD, function(x) as.double(max(x, na.rm = TRUE))),
                 var_sum = sapply(.SD, sum, na.rm = TRUE),
                 var_kurtosis = sapply(.SD, skewness, na.rm = TRUE),
                 var_skewness = sapply(.SD, kurtosis, na.rm = TRUE),
