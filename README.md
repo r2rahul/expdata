@@ -242,10 +242,6 @@ complete_summary(hflights)
 Upcoming Features
 -----------------
 
--   Max 10 and Min 10 count of the numeric variables
-
 -   A Dashboard to:
 
--   Visualize data summary
-
--   Segmentation or creating buckets of the numeric variable and performing group by to creat bucket specific summary.
+    - Visualize data summary
