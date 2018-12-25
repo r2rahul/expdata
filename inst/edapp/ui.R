@@ -1,5 +1,10 @@
 library(shiny)
 library(shinydashboard)
+library(hflights)
+library(plotly)
+library(data.table)
+library(tidyverse)
+library(moments)
 source("helpers_shiny.R")
 source("main_source.R")
 # Define UI for app that draws a histogram ----
@@ -34,6 +39,11 @@ ui <- dashboardPage(
       tags$hr()
     )),
     column(width = 10, height = "100%",
+    fluidRow(
+      valueBox(10 * 2, "New Orders", icon = icon("credit-card")),
+      valueBox(10 * 2, "New Orders", icon = icon("credit-card")),
+      valueBox(10 * 2, "New Orders", icon = icon("credit-card"))
+    ),
     tabBox(
       title = "DataExplorer",
       # The id lets us use input$tabset1 on the server to find the current tab
@@ -43,7 +53,17 @@ ui <- dashboardPage(
       tabPanel("NumericVariable", "Numeric Variables"),
       tabPanel("CharFactorVariables", "Character/Factor/Logical Variables"),
       tabPanel("DateVariables", "Date Variables")
-     )
+     ),
+    tabBox(
+      title = "DataView",
+      # The id lets us use input$tabset1 on the server to find the current tab
+      id = "tabset1",
+      width = NULL,
+      tabPanel("Overview", DT::dataTableOutput('contents')),
+      tabPanel("NumericVariable", DT::dataTableOutput('num_s')),
+      tabPanel("CharFactorVariables", DT::dataTableOutput('char_s')),
+      tabPanel("DateVariables", DT::dataTableOutput('date_s'))
+    )
     )
   )
 )
