@@ -5,20 +5,38 @@ library(plotly)
 library(data.table)
 library(tidyverse)
 library(moments)
+library(lubridate)
 source("helpers_shiny.R")
 source("main_source.R")
 # Define server logic required to draw a histogram ----
-server <- function(input, output) {
-  input_data <- reactive({
-    inFile <- input$file1
-    if (is.null(inFile)){
-      out <- data.table(hflights)
-    }else{
-      out <- fread(inFile$datapath, header = input$header)
-    }
+server <- function(input, output, session) {
+
+data_dt <- reactiveValues(data = data.table(hflights))
+
+observeEvent(input$go, {
+  data_dt$data <- fread(input$file1$datapath, 
+                 header = input$header,
+                 stringsAsFactors = FALSE,
+                 logical01 = TRUE)
+      })
     
-    complete_summary(out) %>% arrange(type)
+  
+input_data <- reactive({
+  complete_summary(data_dt$data) %>% arrange(type)
+})
+  
+output$orig_data <- DT::renderDataTable({
+    DT::datatable(
+      data_dt$data, options = list(
+        lengthMenu = list(c(5, 15, -1), c('5', '15', 'All')),
+        pageLength = 10,
+        scrollX = TRUE
+      ),
+      rownames= FALSE
+    )
+    
   })
+  
   output$contents <- DT::renderDataTable({
     # input$file1 will be NULL initially. After the user selects
     # and uploads a file, it will be a data frame with 'name',

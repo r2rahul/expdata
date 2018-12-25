@@ -5,6 +5,7 @@ library(plotly)
 library(data.table)
 library(tidyverse)
 library(moments)
+library(lubridate)
 source("helpers_shiny.R")
 source("main_source.R")
 # Define UI for app that draws a histogram ----
@@ -17,25 +18,19 @@ ui <- dashboardPage(
     box(
       title = "Upload Data", status = "primary", solidHeader = TRUE,
       collapsible = TRUE, width = NULL,
-      fileInput("file1", "Choose CSV File",
+      fileInput("file1", "Choose a CSV File",
                 accept = c(
                   "text/csv",
                   "text/comma-separated-values,text/plain",
                   ".csv")
       ),
       checkboxInput("header", "Header", TRUE),
+      actionButton("go", "submit"),
       tags$hr()
     ),
     box(
       title = "Variable Selector", status = "primary", solidHeader = TRUE,
       collapsible = TRUE, width = NULL, height = "100%",
-      fileInput("file1", "Choose CSV File",
-                accept = c(
-                  "text/csv",
-                  "text/comma-separated-values,text/plain",
-                  ".csv")
-      ),
-      checkboxInput("header", "Header", TRUE),
       tags$hr()
     )),
     column(width = 10, height = "100%",
@@ -62,7 +57,8 @@ ui <- dashboardPage(
       tabPanel("Overview", DT::dataTableOutput('contents')),
       tabPanel("NumericVariable", DT::dataTableOutput('num_s')),
       tabPanel("CharFactorVariables", DT::dataTableOutput('char_s')),
-      tabPanel("DateVariables", DT::dataTableOutput('date_s'))
+      tabPanel("DateVariables", DT::dataTableOutput('date_s')),
+      tabPanel("InputData", DT::dataTableOutput('orig_data'))
     )
     )
   )
