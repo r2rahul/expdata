@@ -44,7 +44,7 @@ ui <- dashboardPage(
       # The id lets us use input$tabset1 on the server to find the current tab
       id = "tabset1",
       width = NULL,
-      tabPanel("Overview", "Overview"),
+      tabPanel("Overview", plotlyOutput("pairs_plot")),
       tabPanel("NumericVariable", "Numeric Variables"),
       tabPanel("CharFactorVariables", "Character/Factor/Logical Variables"),
       tabPanel("DateVariables", "Date Variables")

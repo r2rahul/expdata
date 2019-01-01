@@ -2,16 +2,18 @@ library(shiny)
 library(shinydashboard)
 library(hflights)
 library(plotly)
+library(GGally)
 library(data.table)
 library(tidyverse)
 library(moments)
 library(lubridate)
 source("helpers_shiny.R")
 source("main_source.R")
+options(shiny.maxRequestSize = 100*1024^2) 
 # Define server logic required to draw a histogram ----
 server <- function(input, output, session) {
 
-data_dt <- reactiveValues(data = data.table(hflights))
+data_dt <- reactiveValues(data = data.table(iris))
 
 observeEvent(input$go, {
   data_dt$data <- fread(input$file1$datapath, 
@@ -106,4 +108,11 @@ output$date_s <- DT::renderDataTable({
       rownames= FALSE
     )
 })
+
+output$pairs_plot <- renderPlotly({
+  pairs_plot(input_data())
+})
+
 }
+
+

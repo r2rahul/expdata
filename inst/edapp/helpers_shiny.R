@@ -3,6 +3,29 @@
 #' This function takes input data.
 #' The function calculates the number of missing values in the vector.
 #'
+#'@import GGally
+#'@import plotly
+#'@param data: The data frame
+#'@param x_var: String name of the variable.
+#'@param y_var: String name of the variable.
+#'@return A rbokeh plot object
+#'@export
+pairs_plot <- function(data, vars = NULL){
+  if(is.null(vars)){
+    p <- (ggpairs(iris) + theme_minimal()) %>% ggplotly()
+  }else{
+    p <- data %>% select(vars) %>% ggpairs() + theme_minimal()
+    p <- ggplotly(p)
+  }
+  
+  return(p)
+}
+
+#' Returns a scatter plot object.
+#'
+#' This function takes input data.
+#' The function calculates the number of missing values in the vector.
+#'
 #'@import rbokeh
 #'@param data: The data frame
 #'@param x_var: String name of the variable.
