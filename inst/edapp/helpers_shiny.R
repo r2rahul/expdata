@@ -1,14 +1,13 @@
-#' Returns a scatter plot object.
+#' Returns a pair plot.
 #'
 #' This function takes input data.
 #' The function calculates the number of missing values in the vector.
 #'
 #'@import GGally
 #'@import plotly
-#'@param data: The data frame
-#'@param x_var: String name of the variable.
-#'@param y_var: String name of the variable.
-#'@return A rbokeh plot object
+#'@param data: The data table
+#'@param vars: String name of the variable.
+#'@return A plotly
 #'@export
 pairs_plot <- function(data, vars = NULL){
   if(is.null(vars)){
@@ -18,6 +17,27 @@ pairs_plot <- function(data, vars = NULL){
     p <- ggplotly(p)
   }
   
+  return(p)
+}
+
+#' Returns a pair plot.
+#'
+#' This function takes input data.
+#' The function calculates the number of missing values in the vector.
+#' M1 <- GKtauDataframe(data)
+#'@import corrplot
+#'@param data: The data table
+#'@param vars: String name of the variable.
+#'@return A R graph object
+#'@export
+asso_plots <- function(data, vars = NULL){
+  data <- data.table(iris)
+  if(is.null(vars)){
+    M <- cor(data[, .SD, .SDcols = sapply(data, is.numeric)])
+  }else{
+    M <- data %>% select(vars) %>% cor()
+  }
+  p <- corrplot(M, method = "ellipse", type = "lower")
   return(p)
 }
 

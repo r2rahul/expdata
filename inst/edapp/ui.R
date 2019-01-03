@@ -2,6 +2,9 @@ library(shiny)
 library(shinydashboard)
 library(hflights)
 library(plotly)
+library(GGally)
+library(GoodmanKruskal)
+library(corrplot)
 library(data.table)
 library(tidyverse)
 library(moments)
@@ -25,6 +28,8 @@ ui <- dashboardPage(
                   ".csv")
       ),
       checkboxInput("header", "Header", TRUE),
+      h4("Enter Comma Separated column names to parse as dates"),
+      textInput("cols", label = h4("Column Names"), value = ""),
       actionButton("go", "submit"),
       tags$hr()
     ),
@@ -34,20 +39,17 @@ ui <- dashboardPage(
       tags$hr()
     )),
     column(width = 10, height = "100%",
-    fluidRow(
-      valueBox(10 * 2, "New Orders", icon = icon("credit-card")),
-      valueBox(10 * 2, "New Orders", icon = icon("credit-card")),
-      valueBox(10 * 2, "New Orders", icon = icon("credit-card"))
-    ),
     tabBox(
       title = "DataExplorer",
       # The id lets us use input$tabset1 on the server to find the current tab
       id = "tabset1",
+      #collapsible = TRUE,
       width = NULL,
       tabPanel("Overview", plotlyOutput("pairs_plot")),
       tabPanel("NumericVariable", "Numeric Variables"),
       tabPanel("CharFactorVariables", "Character/Factor/Logical Variables"),
-      tabPanel("DateVariables", "Date Variables")
+      tabPanel("DateVariables", "Date Variables"),
+      tabPanel("Association", checkboxInput("asso", "Correlation/GoodmanKruskal", TRUE), plotOutput("cor_plot"))
      ),
     tabBox(
       title = "DataView",

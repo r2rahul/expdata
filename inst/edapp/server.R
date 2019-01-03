@@ -3,6 +3,8 @@ library(shinydashboard)
 library(hflights)
 library(plotly)
 library(GGally)
+library(GoodmanKruskal)
+library(corrplot)
 library(data.table)
 library(tidyverse)
 library(moments)
@@ -112,6 +114,11 @@ output$date_s <- DT::renderDataTable({
 output$pairs_plot <- renderPlotly({
   pairs_plot(input_data())
 })
+
+output$cor_plot <- renderPlot({
+  asso_plots(input_data())
+})
+
 
 }
 
