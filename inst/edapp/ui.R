@@ -17,7 +17,7 @@ ui <- dashboardPage(
   dashboardSidebar(disable = TRUE),
   dashboardBody(
     fluidRow(
-    column(width = 2,
+    column(width = 3,
     box(
       title = "Upload Data", status = "primary", solidHeader = TRUE,
       collapsible = TRUE, width = NULL,
@@ -28,17 +28,20 @@ ui <- dashboardPage(
                   ".csv")
       ),
       checkboxInput("header", "Header", TRUE),
-      h4("Enter Comma Separated column names to parse as dates"),
-      textInput("cols", label = h4("Column Names"), value = ""),
+      h4("Enter Space Separated column names to parse as dates"),
+      checkboxInput("pdate", "Columns to Parse as date", FALSE),
+      textInput("colsdate", label = h4("Column Names"), value = "Space Separated Columns"),
       actionButton("go", "submit"),
       tags$hr()
     ),
     box(
-      title = "Variable Selector", status = "primary", solidHeader = TRUE,
+      title = "Meta Data", status = "primary", solidHeader = TRUE,
       collapsible = TRUE, width = NULL, height = "100%",
-      tags$hr()
+      verbatimTextOutput("fbasic"),
+      tags$hr(),
+      DT::dataTableOutput('varmeta')
     )),
-    column(width = 10, height = "100%",
+    column(width = 9, height = "100%",
     tabBox(
       title = "DataExplorer",
       # The id lets us use input$tabset1 on the server to find the current tab
