@@ -1,15 +1,23 @@
 expdata: A light weight exploratory data analysis tool using data.table in R.
 ================
 
--   [Introduction](#introduction)
--   [Installation](#installation)
--   [Example](#example)
--   [Upcoming Features](#upcoming-features)
+- [expdata: A light weight exploratory data analysis tool using data.table in R.](#expdata-a-light-weight-exploratory-data-analysis-tool-using-datatable-in-r)
+  - [Introduction](#introduction)
+  - [Installation](#installation)
+  - [Example](#example)
+  - [Upcoming Features](#upcoming-features)
+  - [Footnote](#footnote)
 
 Introduction
 ------------
 
-The package provides simple methods to get first look into the tidy data. The methods are implemented using **data.table** package so that the package can handle large data sets. The implemented methods can automatically detect variable type and create the corresponding summary as a data frame. The currently implemented methods detect following variable types:
+The package provides simple methods to get first look into the tidy data, which is organized in the form where each column is a feature and row a unit of observation about the features. The motivation to build the package came from personal use case to get a quick snapshot of data during developing research problem and later to create a standard template inside team to start the discussion about potential business insights (At BlackRock our goal was to brainstorm possible investment insights.) that can be derived from the data. The objective was to create a unified template, which each team member is familiar. So, we can kick start the brainstorming session to access the potential impact of the data analysis. Accordingly, the package will fit the use case where:
+
++ A standard template for initial snapshots of the data, like missing values, trend, distribution, and similar data attributes.  
++ Using package codes, which are self-contained for individual workflow as per own use case. 
++ A quick visual snapshot of the data, the package now offers a Shiny App to explore the data.  
+
+The methods are implemented using **data.table** package so that the package can handle large data sets. The implemented methods can automatically detect variable type and create the corresponding summary as a data frame. The currently implemented methods detect following variable types:
 
 -   Numeric
 
@@ -242,10 +250,10 @@ complete_summary(hflights)
 Upcoming Features
 -----------------
 
--   Max 10 and Min 10 count of the numeric variables
-
 -   A Dashboard to:
 
--   Visualize data summary
+    - Visualize data summary
 
--   Segmentation or creating buckets of the numeric variable and performing group by to creat bucket specific summary.
+Footnote
+-----------------
+There are other packages, which offers this kind of functionality. For example, [Skimr](https://github.com/ropensci/skimr) provided a feature to take a snapshot of the data quickly. Another very useful package [Hmsic](https://github.com/harrelfe/Hmisc) also has the functionality to generate pdf reports. My thought process to build this kind of package started during post-doctoral work, when I realized I am using the same set of codes to get an initial assessment of the data. So, decide to wrap around into a package for personal use.  R was under of rapid adoption during my postdoctoral time, and no package fit my use case. So first this was developed for own lab use and later decide to make it open. As I chart along jobs, I will have a universal copy of codes for the intital exploratory data analysis. 
