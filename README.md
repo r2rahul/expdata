@@ -59,6 +59,14 @@ load_all("expdata")
 
 Example
 -------
+First example, generating report
+
+``` r
+library(expdata)
+library(hflights)
+exploratory_report(hfligths, filename = "hflights_report.html")
+```
+This will generate a report named *hflights_report.html* in current working directory. If no name is provided the function will create time stamped file-name. Currently, the function supports only html report generation. 
 
 Let us explore the package using `hflights` data.
 

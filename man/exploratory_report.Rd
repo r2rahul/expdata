@@ -2,7 +2,7 @@
 % Please edit documentation in R/helpers.R
 \name{exploratory_report}
 \alias{exploratory_report}
-\title{Returns a density plot object.}
+\title{Returns a report.}
 \usage{
 exploratory_report(data, filename = NULL,
   output_format = "html_document")
