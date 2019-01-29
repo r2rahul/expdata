@@ -46,7 +46,7 @@ asso_plots <- function(data, vars = NULL){
 #' This function takes input data.
 #' The function calculates the number of missing values in the vector.
 #'
-#'@import rbokeh
+#'@import plotly
 #'@param data: The data frame
 #'@param x_var: String name of the variable.
 #'@param y_var: String name of the variable.
@@ -64,7 +64,7 @@ scatter_plot <- function(data, x_var, y_var){
 #' This function takes input data.
 #' The function calculates the number of missing values in the vector.
 #'
-#'@import rbokeh
+#'@import plotly
 #'@param data: The data frame
 #'@param x_var: String name of the variable.
 #'@param y_var: String name of the variable.
