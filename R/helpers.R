@@ -1,78 +1,9 @@
-#' Returns a scatter plot object.
+#' Returns a report.
 #'
 #' This function takes input data.
 #' The function calculates the number of missing values in the vector.
 #'
-#'@import rbokeh
-#'@param data: The data frame
-#'@param x_var: String name of the variable.
-#'@param y_var: String name of the variable.
-#'@return A rbokeh plot object
-#'@export
-scatter_plot <- function(data, x_var, y_var){
-  p <- figure() %>%
-    ly_points(eval(x_var), eval(y_var), data = data,
-              hover = list(eval(x_var), eval(y_var)))
-  return(p)
-}
-
-#' Returns a bar plot object.
-#'
-#' This function takes input data.
-#' The function calculates the number of missing values in the vector.
-#'
-#'@import rbokeh
-#'@param data: The data frame
-#'@param x_var: String name of the variable.
-#'@param y_var: String name of the variable.
-#'@return A rbokeh plot object
-#'@export
-bar_plot <- function(data, x_var, y_var){
-  p <- figure() %>%
-    ly_bar(eval(x_var), eval(y_var), data = data,
-              hover = list(eval(x_var), eval(y_var)))
-  return(p)
-}
-
-#' Returns a hist plot object.
-#'
-#' This function takes input data.
-#' The function calculates the number of missing values in the vector.
-#'
-#'@import rbokeh
-#'@param data: The data frame
-#'@param x_var: String name of the variable.
-#'@return A rbokeh plot object
-#'@export
-his_plot <- function(data, x_var){
-  p <- figure() %>%
-    ly_hist(eval(x_var), data = data) %>% 
-    ly_density(eval(x_var), data = data)
-  return(p)
-}
-
-#' Returns a density plot object.
-#'
-#' This function takes input data.
-#' The function calculates the number of missing values in the vector.
-#'
-#'@import rbokeh
-#'@param data: The data frame
-#'@param x_var: String name of the variable.
-#'@return A rbokeh plot object
-#'@export
-den_plot <- function(data, x_var){
-  p <- figure() %>% 
-    ly_density(eval(x_var), data = data)
-  return(p)
-}
-
-#' Returns a density plot object.
-#'
-#' This function takes input data.
-#' The function calculates the number of missing values in the vector.
-#'
-#'@import rbokeh
+#'@import knitr
 #'@import rmarkdown
 #'@param data: The data frame
 #'@param filename: String name for the report name.
@@ -83,13 +14,11 @@ exploratory_report <- function(data, filename = NULL, output_format = "html_docu
 
   wd <- getwd()
   if(is.null(filename)){
-    filename <- "eda_report.html"
+    tstamp <- format(Sys.time(), "%Y%m%d_%H%M")
+    filename <- paste0("eda_report", tstamp, ".html")
   }
-  pkg_path <- system.file(package = "expdata", "inst")
-  fname <- "/inst/template_rmarkdown.Rmd"
-  md_path <- paste0(pkg_path, fname)
-  #file.copy(md_path, wd)
-  rmarkdown::render(md_path, 
+  md_path <- system.file("template_rmarkdown.Rmd", package = "expdata")
+  render(md_path, 
                     params = list(data = data), 
     output_format = output_format, 
     output_file = filename, 

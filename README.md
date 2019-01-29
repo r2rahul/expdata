@@ -59,6 +59,14 @@ load_all("expdata")
 
 Example
 -------
+First example, generating report
+
+``` r
+library(expdata)
+library(hflights)
+exploratory_report(hfligths, filename = "hflights_report.html")
+```
+This will generate a report named *hflights_report.html* in current working directory. If no name is provided the function will create time stamped file-name. Currently, the function supports only html report generation. 
 
 Let us explore the package using `hflights` data.
 
@@ -256,4 +264,4 @@ Upcoming Features
 
 Footnote
 -----------------
-There are other packages, which offers this kind of functionality. For example, [Skimr](https://github.com/ropensci/skimr) provided a feature to take a snapshot of the data quickly. Another very useful package [Hmsic](https://github.com/harrelfe/Hmisc) also has the functionality to generate pdf reports. My thought process to build this kind of package started during post-doctoral work, when I realized I am using the same set of codes to get an initial assessment of the data. So, decide to wrap around into a package for personal use.  R was under of rapid adoption during my postdoctoral time, and no package fit my use case. So first this was developed for own lab use and later decide to make it open. As I chart along jobs, I will have a universal copy of codes for the intital exploratory data analysis. 
+There are other packages, which offers this kind of functionality. For example, [Skimr](https://github.com/ropensci/skimr) provided a feature to take a snapshot of the data quickly. Another very useful package [Hmsic](https://github.com/harrelfe/Hmisc) also has the functionality to generate pdf reports. My thought process to build this kind of package started during post-doctoral work, when I realized I am using the same set of codes to get an initial assessment of the data. So, decide to wrap around into a package for personal use.  R was under of rapid adoption during my postdoctoral time, and no package fit my use case. So first this was developed for own lab use and later decide to make it open. As I chart along jobs, I will have a universal copy of codes for the initial exploratory data analysis. 
