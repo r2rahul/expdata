@@ -175,3 +175,17 @@ group_bin <- function(data, x, y = NULL, breaks = NULL, ...){
   
 return(out)
 }
+
+#' The functions executes the dashboard using shiny to explore the data set. 
+#' 
+#' @inheritParams shiny::runApp
+#' 
+#' @export
+start_shiny <- function(port = getOption("shiny.port")) {
+  appDir <- system.file("edapp", package = "expdata")
+  if (appDir == "") {
+    stop("Could not find example directory. Try re-installing `expdata`.", call. = FALSE)
+  }
+  
+  shiny::runApp(appDir, display.mode = "normal", port = port)
+}
