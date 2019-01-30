@@ -22,7 +22,6 @@ ui <- dashboardPage(
       title = "Upload Data", status = "primary", solidHeader = TRUE,
       collapsible = TRUE, width = NULL,
       fileInput("file1", "Choose a CSV File",
-                accept = c(
                   "text/csv",
                   "text/comma-separated-values,text/plain",
                   ".csv")
@@ -68,4 +67,4 @@ ui <- dashboardPage(
     )
   )
 )
-)
+

@@ -2,11 +2,13 @@
 % Please edit documentation in R/helpers.R
 \name{top_min_n}
 \alias{top_min_n}
-\title{Check Date Type}
+\title{Find Max and Min of the Numeric Columns}
 \usage{
 top_min_n(data, x_var, n = 5)
 }
 \arguments{
+\item{data:}{Input data table}
+
 \item{x:}{A single numeric column to get top n and min n numbers}
 
 \item{n:}{count of top numbers to return}
@@ -15,5 +17,5 @@ top_min_n(data, x_var, n = 5)
 returns a data.frame with two columns with min and max numbers
 }
 \description{
-This function checkes if the input column is of date type.
+This function finds max n and min n data of the numeric columns
 }

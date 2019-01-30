@@ -40,82 +40,11 @@ asso_plots <- function(data, vars = NULL){
   p <- corrplot(M, method = "ellipse", type = "lower")
   return(p)
 }
-
-#' Returns a scatter plot object.
-#'
-#' This function takes input data.
-#' The function calculates the number of missing values in the vector.
-#'
-#'@import plotly
-#'@param data: The data frame
-#'@param x_var: String name of the variable.
-#'@param y_var: String name of the variable.
-#'@return A rbokeh plot object
-#'@export
-scatter_plot <- function(data, x_var, y_var){
-  p <- figure() %>%
-    ly_points(eval(x_var), eval(y_var), data = data,
-              hover = list(eval(x_var), eval(y_var)))
-  return(p)
-}
-
-#' Returns a bar plot object.
-#'
-#' This function takes input data.
-#' The function calculates the number of missing values in the vector.
-#'
-#'@import plotly
-#'@param data: The data frame
-#'@param x_var: String name of the variable.
-#'@param y_var: String name of the variable.
-#'@return A rbokeh plot object
-#'@export
-bar_plot <- function(data, x_var, y_var){
-  p <- figure() %>%
-    ly_bar(eval(x_var), eval(y_var), data = data,
-              hover = list(eval(x_var), eval(y_var)))
-  return(p)
-}
-
-#' Returns a hist plot object.
-#'
-#' This function takes input data.
-#' The function calculates the number of missing values in the vector.
-#'
-#'@import rbokeh
-#'@param data: The data frame
-#'@param x_var: String name of the variable.
-#'@return A rbokeh plot object
-#'@export
-his_plot <- function(data, x_var){
-  p <- figure() %>%
-    ly_hist(eval(x_var), data = data) %>% 
-    ly_density(eval(x_var), data = data)
-  return(p)
-}
-
 #' Returns a density plot object.
 #'
 #' This function takes input data.
 #' The function calculates the number of missing values in the vector.
 #'
-#'@import rbokeh
-#'@param data: The data frame
-#'@param x_var: String name of the variable.
-#'@return A rbokeh plot object
-#'@export
-den_plot <- function(data, x_var){
-  p <- figure() %>% 
-    ly_density(eval(x_var), data = data)
-  return(p)
-}
-
-#' Returns a density plot object.
-#'
-#' This function takes input data.
-#' The function calculates the number of missing values in the vector.
-#'
-#'@import rbokeh
 #'@import rmarkdown
 #'@param data: The data frame
 #'@param filename: String name for the report name.

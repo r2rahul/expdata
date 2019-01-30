@@ -7,11 +7,18 @@ Depends:
     R (>= 3.3.1)
 Imports:
     data.table (>= 1.9.6),
-    moments (>= 0.14)
+    moments (>= 0.14),
+    rmarkdown (>= 1.11),
+    knitr (>= 1.21)
+Suggests:
+    shiny (>= 1.2.0),
+    shinydasboard (>= 0.7.1),
+    testthat
 Author: Rahul, Ph.D.
 Maintainer: Rahul <katyayan.rahul@gmail.com>
-License: GPL-3
+License: file LICENSE
 LazyData: TRUE
+Encoding: UTF-8
 URL: http://github.com/r2rahul/expdata
 Encoding: UTF-8
 RoxygenNote: 6.1.1
