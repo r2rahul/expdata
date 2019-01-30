@@ -105,8 +105,8 @@ output$num_s <- DT::renderDataTable({
         scrollX = TRUE
       ),
       rownames= FALSE
-    )
- })
+    ) %>% formatStyle("var_sd", color = styleInterval(0, c('black', 'red')))
+ }) 
 
 output$char_s <- DT::renderDataTable({
   dt <- input_data() %>% filter(type %in% c("character", "factor", "logical"))

@@ -16,6 +16,8 @@ ui <- dashboardPage(
   dashboardHeader(title = "EDA explorer"),
   dashboardSidebar(disable = TRUE),
   dashboardBody(
+    tags$style(HTML('table.dataTable.hover tbody tr:hover, table.dataTable.display tbody tr:hover {background-color: #a1d99b !important;}')),
+    
     fluidRow(
     column(width = 3,
     box(
