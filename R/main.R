@@ -280,6 +280,7 @@ return(out)
 #' This function takes input data.
 #' The function calculates the number of missing values in the vector.
 #'
+#' @importFrom utils head tail
 #' @param x: The data frame
 #' @param variable: String name of the variable.
 #' @return A data frame

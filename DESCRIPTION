@@ -10,9 +10,13 @@ Imports:
     moments (>= 0.14),
     rmarkdown (>= 1.11),
     knitr (>= 1.21)
+Suggests:
+    shiny (>= 1.2.0),
+    shinydasboard (>= 0.7.1),
+    testthat
 Author: Rahul, Ph.D.
 Maintainer: Rahul <katyayan.rahul@gmail.com>
-License: GPL-3
+License: file LICENSE
 LazyData: TRUE
 Encoding: UTF-8
 URL: http://github.com/r2rahul/expdata
