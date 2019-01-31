@@ -29,7 +29,7 @@ library(knitr)
 library(DT)
 library(sparkline)
 
-edadata <- data.table(get(params$data))
+edadata <- data.table(params$data)
 ```
 
 ## Data Summary
