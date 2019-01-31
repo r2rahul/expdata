@@ -10,7 +10,7 @@
 #'@param output_format: Output Format.
 #'@return A Report for the Data Analysis
 #'@export
-exploratory_report <- function(data = iris, filename = NULL, output_format = "html_document"){
+exploratory_report <- function(data, filename = NULL, output_format = "html_document"){
 
   wd <- getwd()
   if(is.null(filename)){
