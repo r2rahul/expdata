@@ -4,15 +4,19 @@ Title: Exploratory Data Analysis using data.table
 Description: A light weight exploratory data analysis tool using data.table.
 Version: 0.1.0
 Depends:
-    R (>= 3.3.1)
+    R (>= 3.5.1),
+    data.table (>= 1.9.6)
 Imports:
-    data.table (>= 1.9.6),
     moments (>= 0.14),
     rmarkdown (>= 1.11),
     knitr (>= 1.21)
+Suggests:
+    shiny (>= 1.2.0),
+    shinydasboard (>= 0.7.1),
+    testthat
 Author: Rahul, Ph.D.
 Maintainer: Rahul <katyayan.rahul@gmail.com>
-License: GPL-3
+License: file LICENSE
 LazyData: TRUE
 Encoding: UTF-8
 URL: http://github.com/r2rahul/expdata

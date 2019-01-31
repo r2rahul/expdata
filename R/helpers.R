@@ -18,13 +18,13 @@ exploratory_report <- function(data, filename = NULL, output_format = "html_docu
     filename <- paste0("eda_report", tstamp, ".html")
   }
   md_path <- system.file("template_rmarkdown.Rmd", package = "expdata")
-  render(md_path, 
-                    params = list(data = data), 
-    output_format = output_format, 
-    output_file = filename, 
-    output_dir = wd,
-    intermediates_dir = wd,
-    knit_root_dir = wd
+  render(md_path,
+          params = list(data = data), 
+          output_format = output_format, 
+          output_file = filename, 
+          output_dir = wd,
+          intermediates_dir = wd,
+          knit_root_dir = wd
     )
 }
 
@@ -174,4 +174,18 @@ group_bin <- function(data, x, y = NULL, breaks = NULL, ...){
   }
   
 return(out)
+}
+
+#' The functions executes the dashboard using shiny to explore the data set. 
+#' 
+#' @inheritParams shiny::runApp
+#' 
+#' @export
+start_shiny <- function(port = getOption("shiny.port")) {
+  appDir <- system.file("edapp", package = "expdata")
+  if (appDir == "") {
+    stop("Could not find example directory. Try re-installing `expdata`.", call. = FALSE)
+  }
+  
+  shiny::runApp(appDir, display.mode = "normal", port = port)
 }

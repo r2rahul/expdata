@@ -8,31 +8,41 @@ output:
     toc_float: TRUE
     toc_depth: 4
     code_download: TRUE
-  word_document: default
   pdf_document: default
+  word_document: default
 params:
   data:
     value: iris
 ---
+
 ## Versoning Report TimeStamp
 Timestamp: `r Sys.time()`
 
 ```{r, echo=FALSE}
+list_packages <- c("data.table", "knitr", "DT", "sparkline")
+if (length(setdiff(list_packages, rownames(installed.packages()))) > 0) {
+  install.packages(setdiff(list_packages, rownames(installed.packages())))  
+}
 library(data.table)
 library(expdata)
 library(knitr)
-edadata <- data.table(get(params$data))
+library(DT)
+library(sparkline)
+
+edadata <- data.table(params$data)
 ```
+
 ## Data Summary
 ### Meta Data
 ```{r meta, echo=FALSE}
-meta <- data.frame(Attribute = c("Num Columns", "Num Rowa"), Value = c(ncol(edadata), nrow(nrow(edadata))))
-kable(meta)
+m <- nrow(edadata)
+meta <- data.frame(Attribute = c("Num Columns", "Num Row"), Value = c(ncol(edadata), m))
+datatable(meta)
 ```
 
 ### Preview Data
 ```{r}
-head(edadata)
+data.table(head(edadata))
 ```
 
 ### Numeric Type
@@ -40,9 +50,24 @@ head(edadata)
 + First Set of Descriptions Numeric Variables
 
 ```{r num_out1, echo=FALSE}
-num_out <- num_summary(edadata)
-cselect1 <- c(1:7)
-kable(num_out[, cselect1, with = FALSE])
+num_out <- data.table(num_summary(edadata))
+num_out[, var_dist := column_inlinebox(edadata)]
+cselect1 <- c(1:7, 21)
+out <- datatable(num_out[, cselect1, with = FALSE], escape = FALSE, filter = 'top', options = list(paging = FALSE, 
+fnDrawCallback = htmlwidgets::JS(
+  '
+function(){
+  HTMLWidgets.staticRender();
+}
+'
+)
+))
+out <- spk_add_deps(out)
+out <- formatStyle(out, columns = c("miss %", "zero %"),
+    color = styleInterval(0.1, c('#636363', '#f03b20'))
+  )
+
+formatPercentage(out, columns = c("miss %", "zero %") , digits = 2)
 ```
 
 + Second Set of Description for Numeric Variables
@@ -50,7 +75,7 @@ kable(num_out[, cselect1, with = FALSE])
 ```{r num_out2, echo=FALSE}
 num_out <- num_summary(edadata)
 cselect2 <- c(1:3, 8:11)
-kable(num_out[, cselect2, with = FALSE])
+datatable(num_out[, cselect2, with = FALSE])
 ```
 
 + Third Set of Description for Numeric Variables
@@ -58,7 +83,7 @@ kable(num_out[, cselect2, with = FALSE])
 ```{r num_out3, echo=FALSE}
 num_out <- num_summary(edadata)
 cselect3 <- c(1:3, 12:16)
-kable(num_out[, cselect3, with = FALSE])
+datatable(num_out[, cselect3, with = FALSE])
 ```
 
 + Fourth Set of Description for Numeric Variables
@@ -66,14 +91,14 @@ kable(num_out[, cselect3, with = FALSE])
 ```{r num_out4, echo=FALSE}
 num_out <- num_summary(edadata)
 cselect4 <- c(1:3, 17:20)
-kable(num_out[, cselect4, with = FALSE])
+datatable(num_out[, cselect4, with = FALSE])
 ```
 
 ### Character type
 
 ```{r char_out, echo=FALSE}
 char_out <- char_summary(edadata)
-kable(char_out)
+datatable(char_out)
 ```
 
 ### Date Type
@@ -83,7 +108,7 @@ kable(char_out)
 ```{r date_out, echo=FALSE}
 date_out <- date_summary(edadata)
 dselect1 <- c(1:7)
-kable(date_out[, dselect1, with = FALSE])
+datatable(date_out[, dselect1, with = FALSE])
 ```
 
 + Date Summary Part 2
@@ -91,14 +116,14 @@ kable(date_out[, dselect1, with = FALSE])
 ```{r date_out2, echo=FALSE}
 date_out <- date_summary(edadata)
 dselect2 <- c(1:3, 8:10)
-kable(date_out[, dselect2, with = FALSE])
+datatable(date_out[, dselect2, with = FALSE])
 ```
 
 ### Logical type
 
 ```{r log_out, echo=FALSE}
 log_out <- log_summary(edadata)
-kable(log_out)
+datatable(log_out)
 ```
 
 Since, there are no logical variable function returned the warning message and stopped.
@@ -107,7 +132,7 @@ Since, there are no logical variable function returned the warning message and s
 
 ```{r fac_out, echo=FALSE}
 fac_out <- factor_summary(edadata)
-kable(fac_out)
+datatable(fac_out)
 ```
 
 ## Session Information
