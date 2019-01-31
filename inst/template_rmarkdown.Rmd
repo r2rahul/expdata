@@ -8,12 +8,13 @@ output:
     toc_float: TRUE
     toc_depth: 4
     code_download: TRUE
-  word_document: default
   pdf_document: default
+  word_document: default
 params:
   data:
     value: iris
 ---
+
 ## Versoning Report TimeStamp
 Timestamp: `r Sys.time()`
 
@@ -27,18 +28,21 @@ library(expdata)
 library(knitr)
 library(DT)
 library(sparkline)
+
 edadata <- data.table(get(params$data))
 ```
+
 ## Data Summary
 ### Meta Data
 ```{r meta, echo=FALSE}
-meta <- data.frame(Attribute = c("Num Columns", "Num Rowa"), Value = c(ncol(edadata), nrow(nrow(edadata))))
+m <- nrow(edadata)
+meta <- data.frame(Attribute = c("Num Columns", "Num Row"), Value = c(ncol(edadata), m))
 datatable(meta)
 ```
 
 ### Preview Data
 ```{r}
-head(edadata)
+data.table(head(edadata))
 ```
 
 ### Numeric Type
@@ -46,9 +50,24 @@ head(edadata)
 + First Set of Descriptions Numeric Variables
 
 ```{r num_out1, echo=FALSE}
-num_out <- num_summary(edadata)
-cselect1 <- c(1:7)
-datatable(num_out[, cselect1, with = FALSE])
+num_out <- data.table(num_summary(edadata))
+num_out[, var_dist := column_inlinebox(edadata)]
+cselect1 <- c(1:7, 21)
+out <- datatable(num_out[, cselect1, with = FALSE], escape = FALSE, filter = 'top', options = list(paging = FALSE, 
+fnDrawCallback = htmlwidgets::JS(
+  '
+function(){
+  HTMLWidgets.staticRender();
+}
+'
+)
+))
+out <- spk_add_deps(out)
+out <- formatStyle(out, columns = c("miss %", "zero %"),
+    color = styleInterval(0.1, c('#636363', '#f03b20'))
+  )
+
+formatPercentage(out, columns = c("miss %", "zero %") , digits = 2)
 ```
 
 + Second Set of Description for Numeric Variables

@@ -10,7 +10,7 @@
 #'@param output_format: Output Format.
 #'@return A Report for the Data Analysis
 #'@export
-exploratory_report <- function(data, filename = NULL, output_format = "html_document"){
+exploratory_report <- function(data = iris, filename = NULL, output_format = "html_document"){
 
   wd <- getwd()
   if(is.null(filename)){
@@ -18,13 +18,13 @@ exploratory_report <- function(data, filename = NULL, output_format = "html_docu
     filename <- paste0("eda_report", tstamp, ".html")
   }
   md_path <- system.file("template_rmarkdown.Rmd", package = "expdata")
-  render(md_path, 
-                    params = list(data = data), 
-    output_format = output_format, 
-    output_file = filename, 
-    output_dir = wd,
-    intermediates_dir = wd,
-    knit_root_dir = wd
+  render(md_path,
+          params = list(data = data), 
+          output_format = output_format, 
+          output_file = filename, 
+          output_dir = wd,
+          intermediates_dir = wd,
+          knit_root_dir = wd
     )
 }
 

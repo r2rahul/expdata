@@ -65,7 +65,7 @@ zeros_sum <- function(x, count){
     return(length(x[x == 0]))
   }else{
     temp <- length(x[x == 0])
-    out <- temp / count
+    out <- (temp / count)
     return(out)
   }
 }
@@ -84,7 +84,7 @@ miss_sum <- function(x, count){
     return(length(x[is.na(x)]))
   }else{
     temp <- length(x[is.na(x)])
-    out <- temp / count
+    out <- (temp / count)
     return(out)
   }
 }
@@ -106,6 +106,7 @@ unique_sum <- function(x){
 #' This function takes input as a data table or data frame.
 #' The function creates summary for the character variable.
 #'
+#' @import data.table
 #' @param data: The data table or data frame
 #' @return A data frame
 #' @export
@@ -134,6 +135,7 @@ char_summary <- function(data){
 #' This function takes input as a data table or data frame.
 #' The function creates summary for the factor variable.
 #'
+#' @import data.table
 #' @param data: The data table or data frame
 #' @return A data frame
 #' @export
@@ -162,6 +164,7 @@ factor_summary <- function(data){
 #' This function takes input as a data table or data frame.
 #' The function creates summary for the numeric variable.
 #'
+#' @import data.table
 #' @param data: The data table or data frame
 #' @return A data frame
 #' @export
@@ -202,6 +205,7 @@ num_summary <- function(data){
 #' This function takes input as a data table or data frame.
 #' The function creates summary for the date variable.
 #'
+#' @import data.table
 #' @param data: The data table or data frame
 #' @return A data frame
 #' @export
@@ -232,6 +236,7 @@ date_summary <- function(data){
 #' This function takes input as a data table or data frame.
 #' The function creates summary for the logical variable.
 #'
+#' @import data.table
 #' @param data: The data table or data frame
 #' @return A data frame
 #' @export
@@ -259,6 +264,7 @@ log_summary <- function(data){
 #' This function takes input as a data table or data frame.
 #' The function creates complete summary of the data.
 #'
+#' @import data.table
 #' @param data: The data table or data frame
 #' @return A frame
 #' @export
@@ -280,6 +286,7 @@ return(out)
 #' This function takes input data.
 #' The function calculates the number of missing values in the vector.
 #'
+#' @import data.table
 #' @importFrom utils head tail
 #' @param x: The data frame
 #' @param variable: String name of the variable.
@@ -305,4 +312,38 @@ maxmin_count <- function(data, var){
 frequent_count <- function(data, var){
   out <- data[, .(freq = .N), by = .(eval(var))][order("freq")]
   return(out)
+}
+
+#' Creates inline box plot
+#'
+#' This function takes input as a data table or data frame.
+#' It creates an inline Box plot using Sparkline
+#'
+#' @import sparkline
+#' @import DT
+#' @param data: The data table or data frame
+#' @return A frame
+#' @export
+create_inlinebox <- function(x){
+  spk_chr(
+    x, type ="box")
+}
+
+#' Creates column of inline box plot
+#'
+#' This function takes input as a data table or data frame.
+#' It creates an inline Box plot using Sparkline
+#'
+#' @import sparkline
+#' @import DT
+#' @param data: The data table or data frame
+#' @return A frame
+#' @export
+column_inlinebox <- function(edadata){
+  if(nrow(edadata) > 5e4){
+    data <- edadata[sample(.N, 5e4)][, .SD, .SDcols = sapply(edadata, is.numeric)]
+  } else{
+    data <- edadata[, .SD, .SDcols = sapply(edadata, is.numeric)]
+  }
+  data[ , .(var_dist = sapply(.SD, create_inlinebox ))]
 }
