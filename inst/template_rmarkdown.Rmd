@@ -21,7 +21,7 @@ Timestamp: `r Sys.time()`
 library(data.table)
 library(expdata)
 library(knitr)
-edadata <- data.table(get(params$data))
+edadata <- data.table((params$data))
 ```
 ## Data Summary
 ### Meta Data
