@@ -12,7 +12,7 @@ Imports:
     knitr (>= 1.21)
 Suggests:
     shiny (>= 1.2.0),
-    shinydasboard (>= 0.7.1),
+    shinydashboard (>= 0.7.1),
     testthat
 Author: Rahul, Ph.D.
 Maintainer: Rahul <katyayan.rahul@gmail.com>

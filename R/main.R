@@ -313,37 +313,3 @@ frequent_count <- function(data, var){
   out <- data[, .(freq = .N), by = .(eval(var))][order("freq")]
   return(out)
 }
-
-#' Creates inline box plot
-#'
-#' This function takes input as a data table or data frame.
-#' It creates an inline Box plot using Sparkline
-#'
-#' @import sparkline
-#' @import DT
-#' @param data: The data table or data frame
-#' @return A frame
-#' @export
-create_inlinebox <- function(x){
-  spk_chr(
-    x, type ="box")
-}
-
-#' Creates column of inline box plot
-#'
-#' This function takes input as a data table or data frame.
-#' It creates an inline Box plot using Sparkline
-#'
-#' @import sparkline
-#' @import DT
-#' @param data: The data table or data frame
-#' @return A frame
-#' @export
-column_inlinebox <- function(edadata){
-  if(nrow(edadata) > 5e4){
-    data <- edadata[sample(.N, 5e4)][, .SD, .SDcols = sapply(edadata, is.numeric)]
-  } else{
-    data <- edadata[, .SD, .SDcols = sapply(edadata, is.numeric)]
-  }
-  data[ , .(var_dist = sapply(.SD, create_inlinebox ))]
-}

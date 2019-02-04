@@ -29,7 +29,7 @@ library(knitr)
 library(DT)
 library(sparkline)
 
-edadata <- data.table(get(params$data))
+edadata <- data.table(params$data)
 ```
 
 ## Data Summary
@@ -48,6 +48,8 @@ data.table(head(edadata))
 ### Numeric Type
 
 + First Set of Descriptions Numeric Variables
+
+__Please note box plots are plotted on random sampled data of 60,000 when number of rows is greater than 60,000__. Since, `sparkline` does not plot box plots for data size bigger than this. Currently, investigating this. 
 
 ```{r num_out1, echo=FALSE}
 num_out <- data.table(num_summary(edadata))
@@ -69,6 +71,7 @@ out <- formatStyle(out, columns = c("miss %", "zero %"),
 
 formatPercentage(out, columns = c("miss %", "zero %") , digits = 2)
 ```
+
 
 + Second Set of Description for Numeric Variables
 
