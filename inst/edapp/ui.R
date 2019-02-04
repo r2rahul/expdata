@@ -9,6 +9,7 @@ library(data.table)
 library(tidyverse)
 library(moments)
 library(lubridate)
+library(DT)
 source("helpers_shiny.R")
 source("main_source.R")
 # Define UI for app that draws a histogram ----
