@@ -11,6 +11,7 @@ library(moments)
 library(lubridate)
 library(parsedate)
 library(DT)
+library(fst)
 source("helpers_shiny.R")
 source("main_source.R")
 options(shiny.maxRequestSize = 100*1024^2) 
@@ -22,10 +23,21 @@ data_dt <- reactiveValues(data = data.table(iris))
 observeEvent(input$go, {
   withProgress(message = 'Reading Data', value = 0, {
   if(input$pdate){
-    data_dt$data <- fread(input$file1$datapath, 
-                header = input$header,
-                stringsAsFactors = FALSE,
-                logical01 = TRUE)[, (input$colsdate) := lapply(.SD, parse_date), .SDcols = input$colsdate]
+    temp <- fread(input$file1$datapath, 
+                  header = input$header,
+                  stringsAsFactors = FALSE,
+                  logical01 = TRUE)
+    if(input$dformat == ""){
+      temp[, (input$colsdate) := lapply(.SD, parse_date), .SDcols = input$colsdate]
+    }else{
+      temp[, (input$colsdate) := lapply(.SD, function(x){parse_date_time(x, input$dformat)}), .SDcols = input$colsdate]
+    }
+    data_dt$data <- temp
+    rm(temp)
+  }else if(input$fstflag) {
+    
+    data_dt$data <- read_fst(input$file1$datapath, as.data.table = TRUE)
+    
   }else{
     data_dt$data <- fread(input$file1$datapath, 
                           header = input$header,

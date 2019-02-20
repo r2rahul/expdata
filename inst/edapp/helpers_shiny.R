@@ -89,4 +89,42 @@ top_min_n <- function(data, x_var, n = 5){
   return(dd)
 }
 
+#' Preprocess the data
+#'
+#' This function checkes if the input column is of date type.
+#'
+#' @importFrom stats IQR median quantile sd
+#' @import data.table
+#' @param x: A single numeric column to get top n and min n numbers
+#' @param n: count of top numbers to return
+#' @return returns a data.frame with two columns with min and max numbers
+#' @export
+preprocess_data <- function(fpath, hflag = TRUE, dcolumn = NULL, dformat = NULL, fcolumn = NULL, store = TRUE){
+  out <- fread(fpath, 
+               header = hflag,
+               stringsAsFactors = FALSE,
+               logical01 = TRUE)
+  
+  if(!is.null(dcolumn)){
+    if(!is.null(dformat)){
+      out[, (dcolumn) := lapply(.SD, function(x){parse_date_time(x, dformat)}), .SDcols = dcolumn]
+    }else{
+      out[, (dcolumn) := lapply(.SD, parse_date), .SDcols = dcolumn]
+    }
+  }
+  
+  
+ if(!is.null(fcolumn)){
+   out[, (fcolumn) := lapply(.SD, as.factor), .SDcols = fcolumn]
+ }
+  
+  tstamp <- paste0("_", format(now(), "%Y%m%d_%H%M", "GMT"))
+  fname <- paste0(gsub(".csv", tstamp, fpath), ".fst")
+  if(store){
+    write_fst(out, fname)
+  }
+  return(out)
+}
+
+
 

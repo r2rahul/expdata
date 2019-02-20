@@ -10,6 +10,7 @@ library(tidyverse)
 library(moments)
 library(lubridate)
 library(DT)
+library(fst)
 source("helpers_shiny.R")
 source("main_source.R")
 # Define UI for app that draws a histogram ----
@@ -28,12 +29,16 @@ ui <- dashboardPage(
                 accept = c(
                   "text/csv",
                   "text/comma-separated-values,text/plain",
-                  ".csv")
+                  ".csv", 
+                  ".fst",
+                  ".fs")
       ),
+      checkboxInput("fstflag", "FST Compressed file (Recommended Very fast)", FALSE),
       checkboxInput("header", "Header", TRUE),
       h4("Enter Space Separated column names to parse as dates"),
       checkboxInput("pdate", "Columns to Parse as date", FALSE),
       textInput("colsdate", label = h4("Column Names"), value = "Space Separated Columns"),
+      textInput("dformat", label = h4("Lubridate style date format (Ymd, dmY etc)"), value = ""),
       actionButton("go", "submit"),
       tags$hr()
     ),
